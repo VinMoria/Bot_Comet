@@ -5,6 +5,7 @@ from botpy.ext.cog_yaml import read
 from botpy.message import GroupMessage, Message
 from openai import OpenAI
 import json
+import re
 
 with open("config.json") as f:
 	config_dict = json.load(f)
@@ -47,10 +48,14 @@ def chatgpt_talk(q):
 def chatgpt_gen():
 	global client
 	completion = gpt_client.chat.completions.create(
-		model="gpt-4o-mini",
+		model=config_dict["ai_key"]["chatgpt_model"],
 		messages=history_context
 	)
 	assistant_reply = completion.choices[0].message.content
+	assistant_reply = assistant_reply.replace("*","")
+	# block发送的url，qq不允许
+	url_pattern = r'https?://\S+|www\.\S+'
+	assistant_reply = re.sub(url_pattern, '[url blocked]', assistant_reply)
 	
 	# 将助手的回复添加到对话历史
 	history_context.append({"role": "assistant", "content": assistant_reply})
@@ -78,4 +83,3 @@ if __name__ == "__main__":
 	intents = botpy.Intents(public_messages=True)
 	client = MyClient(intents=intents, is_sandbox=True)
 	client.run(appid=config_dict["bot_info"]["bot_id"], secret=config_dict["bot_info"]["bot_secret"])
-

@@ -5,10 +5,14 @@ from botpy.ext.cog_yaml import read
 from botpy.message import GroupMessage, Message
 import google.generativeai as genai
 import re
+import json
+
+with open("config.json") as f:
+	config_dict = json.load(f)
 
 _log = logging.get_logger()
 
-def ask_germini(q):
+def ask_gemini(q):
     global model
     r = model.generate_content(q)
     raw_text = r.candidates[0].content.parts[0].text
@@ -28,18 +32,18 @@ class MyClient(botpy.Client):
             group_openid=message.group_openid,
               msg_type=0, 
               msg_id=message.id,
-              content=f"Germini: {ask_germini(message.content)}")
+              content=f"Gemini: {ask_gemini(message.content)}")
         _log.info(messageResult)
 
 
 if __name__ == "__main__":
-	#Germini
-    api = "---"
-    genai.configure(api_key=api)
-    model = genai.GenerativeModel("gemini-1.5-flash")
+	#Gemini
+
+    genai.configure(api_key=config_dict["ai_key"]["gemini_key"])
+    model = genai.GenerativeModel(config_dict["ai_key"]["gemini_model"])
 
 	# qq-bot
     intents = botpy.Intents(public_messages=True)
     client = MyClient(intents=intents, is_sandbox=True)
-    client.run(appid="[your id]", secret="[your secret]")
+    client.run(appid=config_dict["bot_info"]["bot_id"], secret=config_dict["bot_info"]["bot_secret"])
 
