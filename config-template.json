@@ -1,12 +1,12 @@
 {
 	"bot_info": {
-		"appid": "[Your QQ BOT ID]",
-		"secret": "[YOUR QQ BOT SECRET]"
+		"bot_id": "[Your QQ BOT ID]",
+		"bot_secret": "[YOUR QQ BOT SECRET]"
 	},
 	"ai_key": {
 		"chatgpt_model": "[YOUR ChatGPT Model]",
 		"chatgpt_key": "[YOUR ChatGPT API Key]",
-		"germini_model": "[YOUR Germini Model]",
-		"germini_key": "[YOUR Germini API key]"
+		"gemini_model": "[YOUR Germini Model]",
+		"gemini_key": "[YOUR Germini API key]"
 	}
 }
