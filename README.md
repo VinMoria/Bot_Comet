@@ -19,3 +19,9 @@ pip install google-generativeai
 python执行对应的 main_chatgpt.py 或 main_germini.py
 
 > 文件包含一个Dockerfile，可使用docker部署
+
+# TODO
+
+富文本支持
+
+图片支持
