@@ -19,3 +19,6 @@ pip install google-generativeai
 python执行对应的 main_chatgpt.py 或 main_germini.py
 
 > 文件包含一个Dockerfile，可使用docker部署
+
+# Extra
+追加了talk.py与gen_image.py，用于简单与chatgpt对话与图片生成
