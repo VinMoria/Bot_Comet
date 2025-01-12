@@ -6,6 +6,7 @@ from botpy.message import GroupMessage, Message
 from openai import OpenAI
 import json
 import re
+import markdown
 
 with open("config.json") as f:
 	config_dict = json.load(f)
@@ -55,7 +56,7 @@ def chatgpt_gen():
 	assistant_reply = completion.choices[0].message.content
 	assistant_reply = assistant_reply.replace("*","")
 	# block发送的url，qq不允许
-	url_pattern = r'https?://\S+|www\.\S+'
+	url_pattern = r'(?:(?:https?|ftp|mailto)://|www\.)[^\s/$.?#].[^\s]*'
 	assistant_reply = re.sub(url_pattern, '[url blocked]', assistant_reply)
 	
 	# 将助手的回复添加到对话历史
@@ -104,11 +105,13 @@ class MyClient(botpy.Client):
 			await self.send_text(message, chatgpt_talk(in_str))
 
 	async def send_text(self, message, send_content):
+		_log.info(send_content)
+		_log.info(message.group_openid)
 		messageResult = await message._api.post_group_message(
 			group_openid=message.group_openid,
+			content=send_content,
 			msg_type=0, 
-			msg_id=message.id,
-			content=send_content)
+			msg_id=message.id,)
 		_log.info(messageResult)
 
 	async def send_image(self, message, image_prompt):
@@ -135,4 +138,4 @@ if __name__ == "__main__":
 	# qq-bot
 	intents = botpy.Intents(public_messages=True)
 	client = MyClient(intents=intents, is_sandbox=True)
-	client.run(appid=config_dict["bot_info"]["bot_id"], secret=config_dict["bot_info"]["bot_secret"])
+	client.run(appid=config_dict["bot_info"]["test_bot_id"], secret=config_dict["bot_info"]["test_bot_secret"])
